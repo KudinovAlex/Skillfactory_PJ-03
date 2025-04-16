@@ -100,9 +100,14 @@ void post_message(std::vector<Message>& messages, std::vector<User>& users, cons
 	std::string message;
 	enter_field(message, "Введите сообщение: ");
 
-	messages.emplace_back(Message(user_id_from, user_id_to, message));  // тут по идее исключение может быть
-
-	std::cout << "Сообщение успешно отправлено!" << std::endl;
+	try {
+		if (messages.size() == SIZE_MAX) throw std::overflow_error("Сообщение не может быть добавлено");
+		messages.emplace_back(Message(user_id_from, user_id_to, message)); 
+		std::cout << "Сообщение успешно отправлено!" << std::endl;
+	}
+	catch (std::exception& exception) {
+		throw;
+	}
 }
 
 
@@ -119,6 +124,7 @@ int main()
 		User("joeB", "joeB1", "John", "Biden"),							// чтобы база пустой не была
 		User("billG", "billG1", "Bill", "Gates")						// чтобы база пустой не была
 	};
+
 	std::vector<Message> messages = {
 		Message(users[0].getId(), SIZE_MAX, "Добро пожаловать в чат, ведите себя хорошо и я вас не застрелю!"),	// чтобы база пустой не была
 		Message(users[0].getId(), users[1].getId(), "Donald Trump, ты уже достал со своими играми в пошлины!"),	// чтобы база пустой не была
@@ -128,18 +134,6 @@ int main()
 	};
 
 	size_t active_user_id = SIZE_MAX;
-
-	try {
-		for (size_t i = 0; ;++i ) {
-			std::cout << i << std::endl;
-			users.push_back(User("Fuck all of you, old farths!", "Fuck all of you, old farths!", "Fuck all of you, old farths!", "Fuck all of you, old farths!"));
-		}
-	}
-
-	catch (std::exception& exception) {
-		std::cout << exception.what();
-	}
-
 
 	while (true) {
 		// ======================= Логин / регистрация нового пользователя =======================
@@ -178,9 +172,14 @@ int main()
 					std::string user_family_name;
 					enter_field(user_family_name, "Введите фамилию пользователя: ");
 
-					users.emplace_back(User(user_name, user_password, user_name, user_family_name)); // тут по идее исключение может быть
-					//active_user = &users.back();
-					active_user_id = users.back().getId();								// по идее должно сработать
+					try {
+						if (users.size() == SIZE_MAX - 1) throw std::overflow_error("Пользователь не может быт добавлен");
+						users.emplace_back(User(user_name, user_password, user_name, user_family_name)); // тут по идее исключение может быть
+						active_user_id = users.back().getId();								
+					}
+					catch (std::exception& exception) {
+						std::cout << exception.what();  
+					}
 				}
 			}
 		}
@@ -217,7 +216,13 @@ int main()
 				break;
 
 			case 3: // Написать сообщение
-				post_message(messages, users, active_user_id);
+				try {
+					post_message(messages, users, active_user_id);
+				}
+				catch (std::exception& exception) {
+					std::cout << exception.what();
+				}
+
 				break;
 
 			case 4: // Изменить пароль	
