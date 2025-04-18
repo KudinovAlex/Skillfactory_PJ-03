@@ -1,13 +1,8 @@
 #include "User.h"
 #include <iostream>
 
-User::User(std::string& login, std::string& password, std::string& name, std::string& familyName) :
-	_login(login), _password(password), _name(name), _familyName(familyName), _id(_idCounter++) 
-{
-}
-
-User::User(const char* login, const char* password, const char* name, const char* familyName) :
-	_login(login), _password(password), _name(name), _familyName(familyName), _id(_idCounter++) 
+User::User(const std::string& login, const std::string& password, const std::string& name, const std::string& familyName) :
+	_login(login), _password(password), _name(name), _familyName(familyName), _id(_idCounter++)
 {
 }
 

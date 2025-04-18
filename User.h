@@ -1,14 +1,10 @@
 #pragma once
 #include <string>
 
-// тут исключение SIZE_MAX можно ловить при увеличении _idCounter
-
 class User
 {
 public:
-	// не смог сообразить как обойтись одним конструктором User(string&, string&, string&, string&), буду признателен за подсказку
-	User(const char* login, const char* password, const char* name, const char* family_name);
-	User(std::string& login, std::string& password, std::string& name, std::string& family_name);
+	User(const std::string& login, const std::string& password, const std::string& name, const std::string& family_name);
 	~User() = default;
 
 	inline const std::string& getLogin() const { return _login; }
